@@ -129,7 +129,7 @@ class Wkhtmltopdf(object):
                     cli_options += ' --' + argument
 
         #Run wkhtmltopdf via the appropriate subprocess call
-        wkhtmltopdfargs = "wkhtmltopdf" + cli_options + " " + temp_html.name + " " + temp_pdf.name
+        wkhtmltopdfargs = self.add_path + cli_options + " " + temp_html.name + " " + temp_pdf.name
 
         #A work around for python 2.6
         try:
