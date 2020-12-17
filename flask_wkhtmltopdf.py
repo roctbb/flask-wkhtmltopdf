@@ -81,7 +81,7 @@ class Wkhtmltopdf(object):
 
 
     @_maybe_decorate(use_celery, celery.Task())
-    def render_template_to_pdf(self, template_name_or_list, save=False, download=False, wkhtmltopdf_args=None, **context):
+    def render_template_to_pdf(self, template_name_or_list, filename=None, save=False, download=False, wkhtmltopdf_args=None, **context):
         '''Renders a template from the template folder with the given
         context and produces a pdf. As this can be resource intensive, the function
         can easily be decorated with celery.Task() by setting the WKHTMLTOPDF_USE_CELERY to True.
@@ -159,9 +159,9 @@ class Wkhtmltopdf(object):
         response = make_response(binary_pdf)
         response.headers['Content-Type'] = 'application/pdf'
         if download is True:
-            response.headers['Content-Disposition'] = 'attachment; filename=%s.pdf' % temp_pdf.name
+            response.headers['Content-Disposition'] = 'attachment; filename=%s.pdf' % filename if filename else temp_pdf.name
         else:
-            response.headers['Content-Disposition'] = 'inline; filename=%s.pdf' % temp_pdf.name
+            response.headers['Content-Disposition'] = 'inline; filename=%s.pdf' % filename if filename else temp_pdf.name
 
         if save is False:
             os.remove(temp_pdf.name)
