@@ -107,7 +107,7 @@ class Wkhtmltopdf(object):
 
         #render appropriate template and write to a temp file
         rendered = render_template(template_name_or_list, **context).encode('utf-8')
-        with tempfile.NamedTemporaryFile(suffix='.html', dir=os.path.dirname(__file__), delete=False, mode='w') as temp_html:
+        with tempfile.NamedTemporaryFile(suffix='.html', dir=os.path.dirname(__file__), delete=False, mode='wb') as temp_html:
             temp_html.write(rendered)
 
         #Checks to see if the pdf directory exists and generates a random pdf name
