@@ -118,37 +118,8 @@ class Wkhtmltopdf(object):
         with tempfile.NamedTemporaryFile(suffix='.pdf', dir=self.pdf_dir_path, delete=False) as temp_pdf:
             pass
 
-        cli_options = ""
-        
-        # Parse argument list supplied and add them as options to wkhtmltopdf
-        if wkhtmltopdf_args:
-            for argument in wkhtmltopdf_args:
-                if argument.startswith('--'):
-                    cli_options += ' ' + argument
-                else:
-                    cli_options += ' --' + argument
-
-        #Run wkhtmltopdf via the appropriate subprocess call
-        wkhtmltopdfargs = self.add_path + cli_options + " " + temp_html.name + " " + temp_pdf.name
-
-        #A work around for python 2.6
-        try:
-            subprocess.check_output(wkhtmltopdfargs, shell=True)
-        except:
-            def check_output(*popenargs, **kwargs):
-                process = subprocess.Popen(stdout=subprocess.PIPE, *popenargs, **kwargs)
-                output, unused_err = process.communicate()
-                retcode = process.poll()
-                if retcode:
-                    cmd = kwargs.get("args")
-                    if cmd is None:
-                        cmd = popenargs[0]
-                    error = subprocess.CalledProcessError(retcode, cmd)
-                    error.output = output
-                    raise error
-                return output
-            subprocess.check_output = check_output
-            subprocess.check_output(wkhtmltopdfargs, shell=True)
+        print("Converting", temp_html.name, temp_pdf.name)
+        convert_html_to_pdf(temp_html.name, temp_pdf.name)
 
         #Remove the temporary files created
         os.remove(temp_html.name)
